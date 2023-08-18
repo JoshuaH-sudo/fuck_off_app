@@ -3,6 +3,7 @@ import type { ActionFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { create_user } from "~/models/user.server";
 import { create_user_session } from "~/utils/session.server";
+import bcrypt from "bcryptjs";
 
 export const action: ActionFunction = async ({ request }) => {
   if (request.method === "POST") {
@@ -11,7 +12,8 @@ export const action: ActionFunction = async ({ request }) => {
     const username = form_data.get("username") as string;
     const password = form_data.get("password") as string;
 
-    const new_user = await create_user(username, password);
+    const password_hash = await bcrypt.hash(password, 10);
+    const new_user = await create_user(username, password_hash);
 
     return create_user_session({
       request,

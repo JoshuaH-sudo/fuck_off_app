@@ -27,10 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
     const username = form_data.get("username") as string;
     const password = form_data.get("password") as string;
 
-    console.log("auth", username, password);
-
     const found_user = await get_user_by_auth(username, password);
-    if (!found_user) throw "User not found";
 
     return create_user_session({
       request,
